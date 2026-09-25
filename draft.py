@@ -1,14 +1,12 @@
-def SimilaridadedeCosseno(A, B):
+def SimilaridadedeCosseno(B):
     #A e B são vetores binarios. Ex: [1,0,0,1]
-    if (type(A) != type([1,0])): 
-        print("Insira um vetor!")
-        return false
-    if (type(B) != type([1,0])): 
-        print("Insira um vetor!")
-        return false
 
     numerador = 0
     denominador = 0
+    A = []
+
+    for i in range(len(B)):
+        A.append(1)
 
     for i in range(len(A)):
         numerador += A[i]*B[i]
@@ -69,4 +67,79 @@ def IndiceJaccard(A, B):
     
     return n_intersecao/n_uniao
 
-print(IndiceJaccard(list("Amor"),list("Amro")))
+def PalavraparaVetornaoBinario(A, B):
+    #Char vazio: "⠀"
+    vetorbinario_A = []
+    vetorbinario_B = []
+
+    vetor_letrasA = list(A.lower())
+    vetor_letrasB = list(B.lower())
+
+    desacentuacao = str.maketrans(
+    "áàãâäéèêëíìîïóòõôöúùûüç",
+    "aaaaaeeeeiiiiooooouuuuc"
+    )
+
+    texto = "ação é útil"
+    texto = texto.translate(desacentuacao)
+
+    if(len(vetor_letrasA) != len(vetor_letrasB)):
+        if(len(vetor_letrasA) > len(vetor_letrasB)): 
+            for i in range(len(vetor_letrasA)-len(vetor_letrasB)):
+                vetor_letrasB.append("⠀")
+        if(len(vetor_letrasA) < len(vetor_letrasB)): 
+            for i in range(len(vetor_letrasB)-len(vetor_letrasA)):
+                vetor_letrasA.append("⠀")
+    
+    for i in range(len(vetor_letrasA)):
+        vetorbinario_A.append(1)
+        if(vetor_letrasA[i] == vetor_letrasB[i]): vetorbinario_B.append(1)
+        elif((vetor_letrasA[i]).translate(desacentuacao) == vetor_letrasB[i]): vetorbinario_B.append(0.8)
+        elif((vetor_letrasB[i]).translate(desacentuacao) == vetor_letrasA[i]): vetorbinario_B.append(0.8)
+        else: vetorbinario_B.append(0)
+        
+    return vetorbinario_B
+
+def OrdenadorporParametro(A, B):
+    listA = list(A)
+    listB = list(B)
+    movimentoBxA = []
+
+
+    print(f"A: {A}")
+    print(f"B: {B}")
+    print(f"A em vetor: {listA}")
+    print(f"B em vetor: {listB}")
+
+    usadosA = [False] * len(listA)
+
+    for j in range(len(listB)):
+        encontrou = False
+        for i in range(len(listA)):
+            if not usadosA[i] and listB[j] == listA[i]:
+                movimentoBxA.append(i - j)
+                usadosA[i] = True
+                encontrou = True
+                break
+        if not encontrou:
+            movimentoBxA.append('~')
+
+        return movimentoBxA
+            
+def MediaFeatures(A, B):
+    vetor_letrasA = list(A.lower())
+    vetor_letrasB = list(B.lower())
+
+    if(len(vetor_letrasA) != len(vetor_letrasB)):
+        if(len(vetor_letrasA) > len(vetor_letrasB)): 
+            for i in range(len(vetor_letrasA)-len(vetor_letrasB)):
+                vetor_letrasB.append("⠀")
+        if(len(vetor_letrasA) < len(vetor_letrasB)): 
+            for i in range(len(vetor_letrasB)-len(vetor_letrasA)):
+                vetor_letrasA.append("⠀")
+
+    BB = PalavraparaVetornaoBinario(A,B)
+    media = (IndiceJaccard(A,B) + SimilaridadedeCosseno(BB))/2
+    return media
+
+print(MediaFeatures("Teste", "estto"))
