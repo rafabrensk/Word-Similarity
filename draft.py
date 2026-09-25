@@ -1,6 +1,4 @@
 def SimilaridadedeCosseno(B):
-    #A e B são vetores binarios. Ex: [1,0,0,1]
-
     numerador = 0
     denominador = 0
     A = []
@@ -105,12 +103,6 @@ def OrdenadorporParametro(A, B):
     listB = list(B)
     movimentoBxA = []
 
-
-    print(f"A: {A}")
-    print(f"B: {B}")
-    print(f"A em vetor: {listA}")
-    print(f"B em vetor: {listB}")
-
     usadosA = [False] * len(listA)
 
     for j in range(len(listB)):
@@ -121,11 +113,20 @@ def OrdenadorporParametro(A, B):
                 usadosA[i] = True
                 encontrou = True
                 break
-        if not encontrou:
-            movimentoBxA.append('~')
+        #if not encontrou:
+        #    movimentoBxA.append('~')
 
-        return movimentoBxA
-            
+
+    #O limite está entre 0 e (n²/2)
+
+    soma = 0
+    for i in range(len(movimentoBxA)):
+        soma += abs(movimentoBxA[i])
+
+    percentualerro = 1-(soma/((len(listA)**(2))/2))
+
+    return percentualerro
+
 def MediaFeatures(A, B):
     vetor_letrasA = list(A.lower())
     vetor_letrasB = list(B.lower())
@@ -139,7 +140,12 @@ def MediaFeatures(A, B):
                 vetor_letrasA.append("⠀")
 
     BB = PalavraparaVetornaoBinario(A,B)
-    media = (IndiceJaccard(A,B) + SimilaridadedeCosseno(BB))/2
+    media = (IndiceJaccard(A,B) + SimilaridadedeCosseno(BB) + OrdenadorporParametro(A,B))/3
+
+    print(f"Por Jaccard: {IndiceJaccard(A,B)}")
+    print(f"Por Similaridade: {SimilaridadedeCosseno(BB)}")
+    print(f"Por Posição: {OrdenadorporParametro(A,B)}")
+
     return media
 
-print(MediaFeatures("Teste", "estto"))
+print(MediaFeatures("Teste", "testo"))
