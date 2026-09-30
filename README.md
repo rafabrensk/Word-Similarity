@@ -1,34 +1,21 @@
-# WordMatch
+# WordSimilarity
 
-A word similarity algorithm that compares a correct word with an incorrect or modified version and returns a percentage representing how closely they match.
+**WordSimilarity** is a Python library for measuring the similarity between two words. It compares an input string against a target word and returns a similarity score between `0.0` and `1.0`.
 
-## Example
+Ideal for spell-checking, typo detection, and fuzzy string matching.
 
-```text
-word_match("love", "loev") → 0.6
-```
+---
 
-The algorithm should measure how similar the two words are based on their characters and/or positions.
+## 🚀 Usage
 
-## Goal
+```python
+from wordmatch import word_similarity
 
-Develop an algorithm capable of evaluating how close an input word is to the expected word.
+# Exact match
+word_similarity("love", "love")  # 1.0
 
-The initial idea is to represent the result as a value between `0` and `1`:
+# Minor typos / swapped letters
+word_similarity("love", "loev")  # 0.88
 
-* `1.0` → completely correct
-* `0.0` → completely different
-* Values between them → partial similarity
-
-## Examples
-
-```text
-word_match("love", "love") → 1.0
-word_match("love", "loev") → 0.6
-```
-
-More cases will be defined as the algorithm is developed.
-
-## Status
-
-🚧 Early draft — the similarity method and scoring criteria are still being designed.
+# Completely different words
+word_similarity("love", "car")   # 0.03

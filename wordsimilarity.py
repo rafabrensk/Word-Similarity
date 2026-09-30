@@ -15,7 +15,9 @@ def cosine_similarity(B):
 
     denominator = (arA_norm * arB_norm) ** (1/2)
 
-    return numerator/denominator
+    if (denominator != 0):
+        return numerator/denominator
+    else: return 0
 
 def jaccard_index(A, B):
     cardinality_intersection = 0
@@ -114,11 +116,42 @@ def words_size(A,B):
 def process_word(X):
     return list(X.lower())
 
+def features_explain(A,B):
+    print(f"By jaccard: {jaccard_index(A,B)}")
+    print(f"By cosseno: {cosine_similarity(word_to_approximation_vector(A,B))}")
+    print(f"By posição: {calculate_position_displacement(A,B)}")
+    print(f"By tamanho: {words_size(A,B)}")
+
 def average_features(A,B):
-    average = (jaccard_index(A,B) + cosine_similarity(word_to_approximation_vector(A,B)) + calculate_position_displacement(A,B) + words_size(A,B))/4
-    return average
+    jac_Val = jaccard_index(A,B)
+    cos_Val = cosine_similarity(word_to_approximation_vector(A,B))
+    pos_Val = calculate_position_displacement(A,B)
+    wsi_Val = words_size(A,B)
+    array_values = [jac_Val,cos_Val,pos_Val,wsi_Val]
+
+    jac_Imp = 10
+    cos_Imp = 8
+    pos_Imp = 7
+    wsi_Imp = 10
+    array_importance = [jac_Imp,cos_Imp,pos_Imp,wsi_Imp]
+
+    totalIm = 0
+    for i in range(len(array_importance)):
+        totalIm += array_importance[i]
+
+    average = 0
+    for i in range(len(array_values)):
+        average += array_values[i]*array_importance[i]
+    average = average/totalIm
+
+    low_index = 0
+    for i in range(len(array_values)):
+        if(array_values[i] <= 0.05): low_index += 1
+
+    if (low_index > 0): return (average**(low_index*2))
+    else: return average
 
 def word_similarity(A,B):
     return average_features(A,B)
 
-#Exemple: print(word_similarity("maçã", "mbac"))
+#Exemple: print(word_similarity("love", "lvoe"))
